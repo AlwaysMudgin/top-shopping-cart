@@ -10,9 +10,9 @@ function Header({ cartSize }) {
     <>
       <SuperHeader />
       <Wrapper>
-        <Link to="/">
+        <MainLink to="/">
           <Logo src={logoCircle} />
-        </Link>
+        </MainLink>
         <Nav>
           <ul>
             <li>
@@ -39,10 +39,16 @@ const Wrapper = styled.header`
   background-color: var(--black);
   padding: 0.75rem;
   font-family: 'Plex Sans';
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const MainLink = styled(Link)`
+  margin: 0 auto;
 `;
 
 const Logo = styled.img`
-  margin: 0 auto;
   height: 4rem;
   width: auto;
 `;
