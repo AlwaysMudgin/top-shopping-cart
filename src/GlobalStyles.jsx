@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-import Sora from '../../assets/fonts/Sora/Sora-VariableFont_wght.ttf';
+import plexSans from './assets/fonts/IBMPlexSans-VariableFont_wdth,wght.ttf';
+import merriweather from './assets/fonts/Merriweather-VariableFont_opsz,wdth,wght.ttf';
 
 // Base is JWC reset
 
@@ -44,8 +45,18 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-#root, #__next {
+#root {
   isolation: isolate;
+}
+
+@font-face {
+  font-family: "PlexSans";
+  src: url(${plexSans});
+}
+
+@font-face {
+  font-family: "Merriweather";
+  src: url(${merriweather});
 }
 
 `;
