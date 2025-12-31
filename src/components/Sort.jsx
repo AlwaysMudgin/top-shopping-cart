@@ -66,6 +66,10 @@ const Options = styled.ul`
   border-bottom-right-radius: 8px;
   min-width: 100%;
 
+  &:first-of-type {
+    border-top: none;
+  }
+
   @starting-style {
     transform: scaleY(0);
   }

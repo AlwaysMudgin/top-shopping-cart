@@ -60,7 +60,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
+  --black: #0b1613;
   --brand-gold: rgb(241, 194, 73);
+  --blue: #24A0ED;
+  --green: #05a95c;
 }
 
 `;

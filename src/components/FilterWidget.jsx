@@ -20,11 +20,12 @@ function FilterWidget({ current, change }) {
                 type="checkbox"
                 id={option}
                 checked={current[option]}
-                onChange={() => change(option)}
+                onChange={() => change('toggle', option)}
               />
             </Label>
           </FilterOption>
         ))}
+        <Clear onClick={() => change('reset')}>Clear Filters</Clear>
       </Options>
     </Wrapper>
   );
@@ -79,8 +80,8 @@ const Options = styled.ul`
 const FilterOption = styled.li`
   border-bottom: 1px solid #999999;
 
-  &:last-of-type {
-    border-bottom: none;
+  &:first-of-type {
+    border-top: none;
   }
 `;
 
@@ -93,6 +94,17 @@ const Label = styled.label`
   background: none;
   text-align: start;
   padding: 0.5rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--brand-gold);
+  }
+`;
+
+const Clear = styled.button`
+  background: none;
+  border: none;
+  padding: 0.4rem;
 
   &:hover {
     cursor: pointer;
