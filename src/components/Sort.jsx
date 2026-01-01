@@ -65,6 +65,7 @@ const Options = styled.ul`
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   min-width: 100%;
+  background-color: white;
 
   &:first-of-type {
     border-top: none;

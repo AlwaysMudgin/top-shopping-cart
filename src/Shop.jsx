@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
+import { CARD_MIN_WIDTH } from './utils';
+
 import BreadCrumbs from './components/BreadCrumbs';
 import FilterWidget from './components/FilterWidget';
 import Sort from './components/Sort';
@@ -73,7 +75,14 @@ function Shop() {
       </Controls>
       <Products>
         {!data && 'Loading...'}
-        {data && <ProductCard productData={data[0]} filter={changeFilters} />}
+        {data &&
+          data.map((product) => (
+            <ProductCard
+              key={product.id}
+              productData={product}
+              filter={changeFilters}
+            />
+          ))}
       </Products>
     </Wrapper>
   );
@@ -89,6 +98,10 @@ const Controls = styled.div`
 
 const Products = styled.div`
   display: grid;
+  grid-template-columns: repeat(auto-fill, ${CARD_MIN_WIDTH});
+  grid-template-rows: 250px;
+  gap: 0.5rem;
+  align-items: start;
   padding: 1rem;
 `;
 

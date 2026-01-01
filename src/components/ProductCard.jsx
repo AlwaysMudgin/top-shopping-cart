@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { capitalizeFirst } from '../utils';
+import { capitalizeFirst, CARD_MIN_WIDTH } from '../utils';
 import { Star } from 'lucide-react';
 
 const starSize = 14;
@@ -23,10 +23,9 @@ function ProductCard({ productData, filter, numInCart = 0, setNumInCart }) {
 
   return (
     <Wrapper>
-      <Top>
+      <PictureContainer>
         <Picture src={image} />
-        <Description>{description}</Description>
-      </Top>
+      </PictureContainer>
       <Category onClick={() => filter('choose', capitalizeFirst(category))}>
         {capitalizeFirst(category)}
       </Category>
@@ -43,12 +42,11 @@ function ProductCard({ productData, filter, numInCart = 0, setNumInCart }) {
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.2rem;
+  grid-row: span 6;
+  display: grid;
+  grid-template-rows: subgrid;
   font-family: 'Plex Sans';
-  max-width: 12rem;
+  width: ${CARD_MIN_WIDTH};
 `;
 
 const Top = styled.div`
@@ -63,9 +61,15 @@ const Top = styled.div`
   }
 `;
 
-const Picture = styled.img`
+const PictureContainer = styled.div`
+  display: flex;
+  overflow: hidden;
   width: 100%;
-  height: auto;
+`;
+
+const Picture = styled.img`
+  object-fit: contain;
+  width: 100%;
 `;
 
 const Description = styled.p`
@@ -84,6 +88,7 @@ const Category = styled.button`
   background: none;
   border: none;
   padding: 0;
+  text-align: start;
 
   &:hover {
     cursor: pointer;

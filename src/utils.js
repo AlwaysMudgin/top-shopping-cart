@@ -6,3 +6,5 @@ export const capitalizeFirst = (string) => {
 };
 
 const sort = (category, direction = 'descending') => {};
+
+export const CARD_MIN_WIDTH = '13rem';
