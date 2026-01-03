@@ -1,12 +1,28 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { ChevronDown } from 'lucide-react';
 
 function Sort({ current, change }) {
   const [open, setOpen] = useState(false);
 
+  const sortRef = useRef();
+
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (sortRef.current && !sortRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      window.addEventListener('click', handleClose);
+    }
+
+    return () => window.removeEventListener('click', handleClose);
+  }, [open]);
+
   return (
-    <Wrapper>
+    <Wrapper ref={sortRef}>
       <Selector onClick={() => setOpen((prev) => !prev)}>
         {current.charAt(0).toUpperCase() + current.slice(1)}
         <StyledPicker $open={open} />
@@ -102,4 +118,4 @@ const OptionButton = styled.button`
   }
 `;
 
-export default Sort;
+export default memo(Sort);

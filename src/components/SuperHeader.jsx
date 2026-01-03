@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Check } from 'lucide-react';
 
+const numItems = 3;
+
 function SuperHeader() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (index >= CONTENT.length - 1) {
+      if (index >= numItems - 1) {
         setIndex(0);
       } else {
         setIndex((prev) => prev + 1);
@@ -25,11 +27,11 @@ function SuperHeader() {
       </Text>
       <Text $exit={index !== 1}>
         <Check color="green" size={12} strokeWidth={4} />
-        <Bold>Fast tracked</Bold> shipping in 2 to 4 days
+        <Bold>Fast tracked</Bold> brigging in 2 to 4 days
       </Text>
       <Text $exit={index !== 2}>
         <Check color="green" size={12} strokeWidth={4} />
-        <Bold>Boveda</Bold> controlled packages
+        <Bold>Brigeda</Bold> controlled packages
       </Text>
     </Wrapper>
   );
@@ -65,17 +67,5 @@ const Text = styled.span`
 const Bold = styled.span`
   font-weight: bold;
 `;
-
-const CONTENT = [
-  <Text>
-    <Bold>Premium brigars</Bold> for an affordable price
-  </Text>,
-  <Text>
-    <Bold>Fast tracked</Bold> shipping in 2 to 4 days
-  </Text>,
-  <Text>
-    <Bold>Boveda</Bold> controlled packages
-  </Text>,
-];
 
 export default SuperHeader;

@@ -23,7 +23,7 @@ function Header({ cartSize }) {
             <li>
               <StyledLink to="/cart">
                 <ShoppingCart />
-                {cartSize > 0 && <CartSize>3</CartSize>}
+                {cartSize > 0 && <CartSize>{cartSize}</CartSize>}
               </StyledLink>
             </li>
           </ul>
@@ -61,7 +61,7 @@ const Nav = styled.nav`
 
   & ul {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     padding: 0;
   }
 

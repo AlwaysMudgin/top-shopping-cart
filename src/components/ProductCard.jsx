@@ -1,30 +1,27 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
-import { capitalizeFirst, CARD_MIN_WIDTH } from '../utils';
-import { Star } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
+import { capitalizeFirst, numInCart, CARD_MIN_WIDTH } from '../utils';
+import ReviewStars from './ReviewStars';
 
-const starSize = 14;
-
-function ReviewStars({ rate }) {
-  return (
-    <Stars $showWidth={(rate / 5) * 5 * starSize}>
-      <StyledStar size={starSize} fill="rgb(241, 194, 73)" strokeWidth="1px" />
-      <StyledStar size={starSize} fill="rgb(241, 194, 73)" strokeWidth="1px" />
-      <StyledStar size={starSize} fill="rgb(241, 194, 73)" strokeWidth="1px" />
-      <StyledStar size={starSize} fill="rgb(241, 194, 73)" strokeWidth="1px" />
-      <StyledStar size={starSize} fill="rgb(241, 194, 73)" strokeWidth="1px" />
-    </Stars>
-  );
-}
-
-function ProductCard({ productData, filter, numInCart = 0, setNumInCart }) {
+function ProductCard({ productData, select, filter, cart, updateCart }) {
+  const bottomRef = useRef();
   if (!productData) return;
-  console.log(productData);
-  const { title, description, price, rating, category, image } = productData;
+  const { title, price, rating, category, image } = productData;
+  const quantity = numInCart(productData.id, cart);
+  console.log(quantity);
 
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={(e) => {
+        e.stopPropagation();
+        if (e.target === bottomRef.current) return;
+        select(productData);
+      }}
+    >
       <PictureContainer>
         <Picture src={image} />
+        <DetailsButton>See Details</DetailsButton>
       </PictureContainer>
       <Category onClick={() => filter('choose', capitalizeFirst(category))}>
         {capitalizeFirst(category)}
@@ -35,8 +32,31 @@ function ProductCard({ productData, filter, numInCart = 0, setNumInCart }) {
         <Rate>{rating.rate}</Rate>
         <Count>{rating.count} Ratings</Count>
       </Rating>
-      <Price>${price}</Price>
-      {numInCart === 0 ? <AddToCart>Add to Cart</AddToCart> : <Input></Input>}
+      <Price>${price.toFixed(2)}</Price>
+      {quantity === 0 ? (
+        <AddToCart
+          onClick={(e) => {
+            e.stopPropagation();
+            updateCart(productData, 'add');
+          }}
+        >
+          Add to Cart
+        </AddToCart>
+      ) : (
+        <ChangeCart onClick={(e) => e.stopPropagation()}>
+          <Remove onClick={() => updateCart(productData, 'remove')}>
+            <Minus />
+          </Remove>
+          <NumInCart
+            type="number"
+            value={quantity}
+            onChange={(e) => updateCart(productData, 'set', e.target.value)}
+          />
+          <Add onClick={() => updateCart(productData, 'add')}>
+            <Plus />
+          </Add>
+        </ChangeCart>
+      )}
     </Wrapper>
   );
 }
@@ -45,41 +65,53 @@ const Wrapper = styled.div`
   grid-row: span 6;
   display: grid;
   grid-template-rows: subgrid;
+  gap: 0.2rem;
   font-family: 'Plex Sans';
   width: ${CARD_MIN_WIDTH};
 `;
 
-const Top = styled.div`
-  position: relative;
+const DetailsButton = styled.div`
+  position: absolute;
+  bottom: 0;
+  transform: translateY(0);
+  transition-behavior: allow-discrete;
+  transition: display 0.3s, transform 0.3s;
+  background-color: rgba(11, 22, 19, 0.7);
+  color: var(--brand-gold);
+  font-weight: bold;
+  width: 100%;
+  padding: 0.5rem 0;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
 
-  & > p {
-    display: none;
-  }
-
-  &:hover > p {
-    display: block;
+  @starting-style {
+    transform: translateY(100%);
   }
 `;
 
-const PictureContainer = styled.div`
+const PictureContainer = styled.button`
+  isolation: isolate;
+  position: relative;
   display: flex;
+  justify-content: center;
   overflow: hidden;
   width: 100%;
+  border: none;
+  padding: none;
+  background: none;
+
+  &:hover ${DetailsButton} {
+    display: block;
+  }
+
+  &:not(:hover) ${DetailsButton} {
+    display: none;
+  }
 `;
 
 const Picture = styled.img`
   object-fit: contain;
   width: 100%;
-`;
-
-const Description = styled.p`
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(11, 22, 19, 0.7);
-  color: white;
-  padding: 0.5rem;
 `;
 
 const Category = styled.button`
@@ -106,17 +138,6 @@ const Rating = styled.div`
   font-size: 0.8rem;
 `;
 
-const Stars = styled.div`
-  display: flex;
-  max-width: ${(props) => props.$showWidth}px;
-  overflow: hidden;
-`;
-
-const StyledStar = styled(Star)`
-  color: var(--black);
-  min-width: ${starSize}px;
-`;
-
 const Rate = styled.p``;
 
 const Count = styled.p`
@@ -138,6 +159,33 @@ const AddToCart = styled.button`
   width: 100%;
 `;
 
-const Input = styled.div``;
+const ChangeCart = styled.div`
+  --outside-radius: 10px;
+  display: flex;
+`;
+
+const Remove = styled.button`
+  background-color: var(--black);
+  color: var(--brand-gold);
+  border: none;
+  border-radius: 0px;
+  border-top-left-radius: var(--outside-radius);
+  border-bottom-left-radius: var(--outside-radius);
+`;
+
+const Add = styled.button`
+  background-color: var(--brand-gold);
+  border: none;
+  border-radius: 0px;
+  border-top-right-radius: var(--outside-radius);
+  border-bottom-right-radius: var(--outside-radius);
+`;
+
+const NumInCart = styled.input`
+  max-width: 70%;
+  border: 1px solid var(--black);
+  border-radius: 0px;
+  text-align: center;
+`;
 
 export default ProductCard;

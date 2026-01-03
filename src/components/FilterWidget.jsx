@@ -1,12 +1,28 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { SlidersHorizontal } from 'lucide-react';
 
 function FilterWidget({ current, change }) {
   const [open, setOpen] = useState(false);
 
+  const filterRef = useRef();
+
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (filterRef.current && !filterRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      window.addEventListener('click', handleClose);
+    }
+
+    return () => window.removeEventListener('click', handleClose);
+  }, [open]);
+
   return (
-    <Wrapper>
+    <Wrapper ref={filterRef}>
       <Selector onClick={() => setOpen((prev) => !prev)}>
         Filter
         <StyledPicker size={18} />
@@ -112,4 +128,4 @@ const Clear = styled.button`
   }
 `;
 
-export default FilterWidget;
+export default memo(FilterWidget);
