@@ -81,13 +81,16 @@ const Card = styled.div`
 const VideoCard = styled(Card)`
   position: relative;
   grid-area: video;
-  align-items: stretch;
+
+  display: flex;
 `;
 
 const Player = styled.video`
   position: absolute;
   z-index: -2;
   border-radius: 4px;
+  height: 100%;
+  object-fit: fill;
 `;
 
 const OverlayText = styled.div`
