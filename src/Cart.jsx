@@ -60,10 +60,10 @@ function Cart() {
                       }
                     />
                     <QuantButtons>
-                      <PlusButton>
+                      <PlusButton onClick={() => updateCart(item, 'add')}>
                         <Plus size={12} />
                       </PlusButton>
-                      <MinusButton>
+                      <MinusButton onClick={() => updateCart(item, 'remove')}>
                         <Minus size={12} />
                       </MinusButton>
                     </QuantButtons>
