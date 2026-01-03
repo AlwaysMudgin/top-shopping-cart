@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import styled from 'styled-components';
 import { useOutletContext } from 'react-router';
-import { CARD_MIN_WIDTH } from './utils';
+import { filterAndSort, CARD_MIN_WIDTH } from './utils';
 import { XCircle } from 'lucide-react';
 
 import BreadCrumbs from './components/BreadCrumbs';
@@ -11,32 +11,31 @@ import Sort from './components/Sort';
 import ProductCard from './components/ProductCard';
 import ProductModal from './components/ProductModal';
 
-const productsData = fetch('https://fakestoreapi.com/products');
-// In larger projects with many fetches, avoid pre-fetching before
-// render. Browser max fetch slots can block other components
-// that need their data first.
-
 function Shop() {
   const [data, setData] = useState([]);
-  const [sort, setSort] = useState('Category');
+  const [sort, setSort] = useState('category');
   const [filters, setFilters] = useState({
-    "Men's Clothing": false,
-    Jewelery: false,
-    Electronics: false,
-    "Women's Clothing": false,
+    "men's clothing": false,
+    jewelery: false,
+    electronics: false,
+    "women's clothing": false,
   });
   const [detailedProductData, setDetailedProductData] = useState(null);
   const [cart, updateCart] = useOutletContext();
   const [brig, setBrig] = useState(true);
   const path = useLocation().pathname.slice(1).split('/');
 
+  const filteredAndSorted = filterAndSort(data, filters, sort);
+  console.log(filteredAndSorted);
+
   useEffect(() => {
     const dataFetch = async () => {
       try {
-        const data = await (await productsData).json();
+        const response = await fetch('https://fakestoreapi.com/products');
+        const data = await response.json();
         setData(data);
       } catch {
-        return;
+        setData('error');
       }
     };
 
@@ -68,6 +67,7 @@ function Shop() {
   };
 
   if (!data) return 'Loading...';
+  if (data === 'error') return 'Loading error. Please try again.';
 
   return (
     <Wrapper>
@@ -79,7 +79,7 @@ function Shop() {
       <Products>
         {!data && 'Loading...'}
         {data &&
-          data.map((product) => (
+          filteredAndSorted.map((product) => (
             <ProductCard
               key={product.id}
               productData={product}

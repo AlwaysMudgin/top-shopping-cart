@@ -23,40 +23,50 @@ function Sort({ current, change }) {
 
   return (
     <Wrapper ref={sortRef}>
-      <Selector onClick={() => setOpen((prev) => !prev)}>
-        {current.charAt(0).toUpperCase() + current.slice(1)}
-        <StyledPicker $open={open} />
-      </Selector>
-      <Options $show={open}>
-        <SortOption>
-          <OptionButton onClick={() => change('Category')}>
-            Category
-          </OptionButton>
-        </SortOption>
-        <SortOption>
-          <OptionButton onClick={() => change('Price')}>Price</OptionButton>
-        </SortOption>
-        <SortOption>
-          <OptionButton onClick={() => change('Rating')}>Rating</OptionButton>
-        </SortOption>
-      </Options>
+      <By>Sort By: </By>
+      <Dropdown>
+        <Selector onClick={() => setOpen((prev) => !prev)}>
+          {current.charAt(0).toUpperCase() + current.slice(1)}
+          <StyledPicker $open={open} />
+        </Selector>
+        <Options $show={open}>
+          <SortOption>
+            <OptionButton onClick={() => change('category')}>
+              Category
+            </OptionButton>
+          </SortOption>
+          <SortOption>
+            <OptionButton onClick={() => change('price')}>Price</OptionButton>
+          </SortOption>
+          <SortOption>
+            <OptionButton onClick={() => change('rating')}>Rating</OptionButton>
+          </SortOption>
+        </Options>
+      </Dropdown>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   position: relative;
-  width: max-content;
   font-family: 'Plex Sans';
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
+
+const By = styled.span``;
+
+const Dropdown = styled.div``;
 
 const Selector = styled.button`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 0.5rem;
   background: white;
   border: 1px solid #999999;
   padding: 0.5rem;
+  width: 150px;
 
   &:hover {
     cursor: pointer;
@@ -80,8 +90,8 @@ const Options = styled.ul`
   border: 1px solid #999999;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  min-width: 100%;
   background-color: white;
+  width: 150px;
 
   &:first-of-type {
     border-top: none;

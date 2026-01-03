@@ -9,7 +9,6 @@ function ProductCard({ productData, select, filter, cart, updateCart }) {
   if (!productData) return;
   const { title, price, rating, category, image } = productData;
   const quantity = numInCart(productData.id, cart);
-  console.log(quantity);
 
   return (
     <Wrapper

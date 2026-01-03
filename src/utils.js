@@ -84,4 +84,49 @@ export const getCartTotal = (cart) => {
   return total.toFixed(2);
 };
 
+const filterCart = (data, filters) => {
+  if (!data || !filters) {
+    console.log('could not filter data', { data, filters });
+    return;
+  }
+
+  let params = [];
+  for (const [key, value] of Object.entries(filters)) {
+    if (value) {
+      params.push(key);
+    }
+  }
+  console.log(params);
+  if (params.length === 0) {
+    return data;
+  }
+
+  console.log(data);
+  return data.filter((item) => {
+    console.log(params, item.category);
+    return params.includes(item.category);
+  });
+};
+
+const sortCart = (data, param) => {
+  if (param === 'category') {
+    return data;
+  }
+  if (param === 'price') {
+    const sorted = data.toSorted((a, b) => a.price - b.price);
+    return sorted;
+  }
+  if (param === 'rating') {
+    const sorted = data.toSorted((a, b) => b.rating.rate - a.rating.rate);
+    return sorted;
+  }
+};
+// category, price, rating
+
+export const filterAndSort = (data, filters, sort) => {
+  const filtered = filterCart(data, filters);
+  const filteredAndSorted = sortCart(filtered, sort);
+  return filteredAndSorted;
+};
+
 export const CARD_MIN_WIDTH = '13rem';

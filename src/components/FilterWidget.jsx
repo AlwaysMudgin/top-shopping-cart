@@ -28,19 +28,25 @@ function FilterWidget({ current, change }) {
         <StyledPicker size={18} />
       </Selector>
       <Options $show={open}>
-        {Object.keys(current).map((option) => (
-          <FilterOption key={option}>
-            <Label htmlFor={option}>
-              {option}
-              <input
-                type="checkbox"
-                id={option}
-                checked={current[option]}
-                onChange={() => change('toggle', option)}
-              />
-            </Label>
-          </FilterOption>
-        ))}
+        {Object.keys(current).map((option) => {
+          const capitalized = option
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          return (
+            <FilterOption key={option}>
+              <Label htmlFor={option}>
+                {capitalized}
+                <input
+                  type="checkbox"
+                  id={option}
+                  checked={current[option]}
+                  onChange={() => change('toggle', option)}
+                />
+              </Label>
+            </FilterOption>
+          );
+        })}
         <Clear onClick={() => change('reset')}>Clear Filters</Clear>
       </Options>
     </Wrapper>
